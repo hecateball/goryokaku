@@ -29,6 +29,7 @@ export default {
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.FIREBASE_APP_ID,
     },
+    // Sample Data
     businesses: [
       {
         displayName: 'Lemonade Stand',
@@ -43,8 +44,13 @@ export default {
             multiplier: 3,
           },
           {
-            displayName: 'Novelty Straws',
+            displayName: 'Upgrade 2',
             cost: 2000,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Upgrade 3',
+            cost: 20000,
             multiplier: 3,
           },
         ],
@@ -54,11 +60,21 @@ export default {
         earnings: 60,
         interval: 3000,
         expansion: { cost: 69 },
-        manager: { cost: 25 },
+        manager: { cost: 100000 },
         upgrades: [
           {
             displayName: 'Funny Pages',
             cost: 500000,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Upgrade 2',
+            cost: 1000000,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Upgrade 3',
+            cost: 2000000,
             multiplier: 3,
           },
         ],
@@ -66,13 +82,23 @@ export default {
       {
         displayName: 'Car Wash',
         earnings: 60,
-        interval: 3000,
+        interval: 10000,
         expansion: { cost: 720 },
-        manager: { cost: 25 },
+        manager: { cost: 500000 },
         upgrades: [
           {
             displayName: 'Drive Through Wash',
             cost: 1000000,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Upgrade 2',
+            cost: 2000000,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Upgrade 3',
+            cost: 30000000,
             multiplier: 3,
           },
         ],
