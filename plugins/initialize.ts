@@ -28,40 +28,47 @@ export default defineNuxtPlugin(async () => {
     cash: 0,
     statuses: {},
   })
-  const unsubscribe = await new Promise<Function>((resolve) => {
-    const unsubscribe = firebase
-      .firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser!.uid)
-      .onSnapshot((snapshot) => {
-        if (!snapshot.exists) {
-          console.debug('invalid session')
-          return
-        }
-        session.cash = snapshot.get('cash')
-        resolve(unsubscribe)
-      })
-    firebase
-      .firestore()
-      .collection('users')
-      .doc(firebase.auth().currentUser!.uid)
-      .collection('statuses')
-      .withConverter(converter)
-      .onSnapshot((snapshot) => {
-        const statuses: { [key: string]: Status } = {}
-        snapshot.docs.forEach((status) => {
-          statuses[status.data().business.id] = {
-            reference: status.ref,
-            branches: status.data().branches,
-            manager: status.data().manager,
-            grade: status.data().grade,
-          }
-        })
-        session.statuses = statuses
-      })
+  await new Promise<Function>(async (resolve) => {
+    await Promise.all([
+      new Promise((resolve) => {
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(firebase.auth().currentUser!.uid)
+          .onSnapshot((snapshot) => {
+            if (!snapshot.exists) {
+              console.debug('invalid session')
+              return
+            }
+            session.cash = snapshot.get('cash')
+            resolve()
+          })
+      }),
+      new Promise((resolve) => {
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(firebase.auth().currentUser!.uid)
+          .collection('statuses')
+          .withConverter(converter)
+          .onSnapshot((snapshot) => {
+            const statuses: { [key: string]: Status } = {}
+            snapshot.docs.forEach((status) => {
+              statuses[status.data().business.id] = {
+                reference: status.ref,
+                branches: status.data().branches,
+                manager: status.data().manager,
+                grade: status.data().grade,
+              }
+            })
+            session.statuses = statuses
+            resolve()
+          })
+      }),
+    ])
+    resolve()
   })
   onGlobalSetup(() => {
     provide(SessionKey, session)
-    onUnmounted(unsubscribe)
   })
 })
