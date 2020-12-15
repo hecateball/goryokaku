@@ -1,9 +1,9 @@
 import { ref, watchEffect } from '@nuxtjs/composition-api'
 import { Business } from '~/composables/business/index'
+import { Session, useSession } from '~/composables/session'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-import { useSession } from '~/composables/session'
 
 export const useRun = (business: Business) => {
   const running = ref<boolean>(false)
@@ -18,14 +18,13 @@ export const useRun = (business: Business) => {
     if (currentUser === null) {
       throw new Error('unauthenticated')
     }
+    const profit = calculateProfit(business, session)
     await firebase
       .firestore()
       .collection('users')
       .doc(currentUser.uid)
       .update({
-        cash: firebase.firestore.FieldValue.increment(
-          business.earnings * session.statuses[business.id].branches
-        ),
+        cash: firebase.firestore.FieldValue.increment(profit),
       })
   }
   watchEffect(async () => {
@@ -40,4 +39,12 @@ export const useRun = (business: Business) => {
     run,
     running,
   }
+}
+
+const calculateProfit = (business: Business, session: Session) => {
+  const multiplier = business.upgrades
+    .filter((upgrade, index) => index < session.statuses[business.id].grade)
+    .map((upgrade) => upgrade.multiplier)
+    .reduce((previousValue, currentValue) => previousValue * currentValue, 1)
+  return business.earnings * session.statuses[business.id].branches * multiplier
 }

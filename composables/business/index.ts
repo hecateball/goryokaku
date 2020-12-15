@@ -28,6 +28,7 @@ export type Business = {
   upgrades: {
     displayName: string
     cost: number
+    multiplier: number
   }[]
 }
 
@@ -40,16 +41,11 @@ const converter: firebase.firestore.FirestoreDataConverter<Business> = {
       interval: snapshot.get('interval'),
       expansion: snapshot.get('expansion'),
       manager: snapshot.get('manager'),
-      upgrades: [
-        {
-          displayName: 'Something',
-          cost: snapshot.get('upgrade').cost,
-        },
-      ],
+      upgrades: snapshot.get('upgrades'),
     }
   },
   toFirestore() {
-    throw new ReferenceError('Do not update Business')
+    throw new ReferenceError('Do not update Businesses')
   },
 }
 
@@ -60,6 +56,7 @@ export const useBusinesses = () => {
       .firestore()
       .collection('businesses')
       .withConverter(converter)
+      .orderBy('earnings', 'asc')
       .get()
     businesses.value = snapshot.docs.map((doc) => doc.data())
   })

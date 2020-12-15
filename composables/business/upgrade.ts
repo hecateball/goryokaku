@@ -9,8 +9,8 @@ export const useUpgrade = (business: Business) => {
   const { session } = useSession()
   const disabled = computed(
     () =>
-      session.statuses[business.id].upgraded ||
-      session.cash < business.upgrades[0].cost
+      session.statuses[business.id].grade === business.upgrades.length ||
+      session.cash < business.upgrades[session.statuses[business.id].grade].cost
   )
   const upgrade = async () => {
     if (disabled.value) {
@@ -23,11 +23,11 @@ export const useUpgrade = (business: Business) => {
       .doc(firebase.auth().currentUser!.uid)
     batch.update(userReference, {
       cash: firebase.firestore.FieldValue.increment(
-        -1 * business.upgrades[0].cost
+        -1 * business.upgrades[session.statuses[business.id].grade].cost
       ),
     })
     batch.update(session.statuses[business.id].reference, {
-      upgraded: true,
+      grade: firebase.firestore.FieldValue.increment(1),
     })
     await batch.commit()
   }

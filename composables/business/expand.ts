@@ -22,9 +22,21 @@ export const useExpand = (business: Business) => {
         -1 * business.expansion.cost
       ),
     })
-    batch.update(session.statuses[business.id].reference, {
-      branches: firebase.firestore.FieldValue.increment(1),
-    })
+    if (session.statuses[business.id] !== undefined) {
+      batch.update(session.statuses[business.id].reference, {
+        branches: firebase.firestore.FieldValue.increment(1),
+      })
+    } else {
+      batch.set(userReference.collection('statuses').doc(), {
+        reference: firebase
+          .firestore()
+          .collection('businesses')
+          .doc(business.id),
+        branches: 1,
+        manager: false,
+        grade: 0,
+      })
+    }
     await batch.commit()
   }
   return { expand, disabled }

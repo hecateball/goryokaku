@@ -15,7 +15,7 @@ const converter = {
       business: snapshot.get('reference'),
       branches: snapshot.get('branches'),
       manager: snapshot.get('manager'),
-      upgraded: snapshot.get('upgraded'),
+      grade: snapshot.get('grade'),
     }
   },
   toFirestore: () => {
@@ -54,7 +54,7 @@ export default defineNuxtPlugin(async () => {
             reference: status.ref,
             branches: status.data().branches,
             manager: status.data().manager,
-            upgraded: status.data().upgraded,
+            grade: status.data().grade,
           }
         })
         session.statuses = statuses

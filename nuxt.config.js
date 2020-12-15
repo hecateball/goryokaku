@@ -1,7 +1,7 @@
 export default {
   ssr: false,
   head: {
-    title: 'Adventure Capitalist Clone',
+    title: 'AdVenture Capitalist Clone',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -35,8 +35,47 @@ export default {
         earnings: 1,
         interval: 1000,
         expansion: { cost: 10 },
+        manager: { cost: 1000 },
+        upgrades: [
+          {
+            displayName: 'Little Umbrellas',
+            cost: 100,
+            multiplier: 3,
+          },
+          {
+            displayName: 'Novelty Straws',
+            cost: 2000,
+            multiplier: 3,
+          },
+        ],
+      },
+      {
+        displayName: 'Newspaper Delivery',
+        earnings: 60,
+        interval: 3000,
+        expansion: { cost: 69 },
         manager: { cost: 25 },
-        upgrade: { cost: 20 },
+        upgrades: [
+          {
+            displayName: 'Funny Pages',
+            cost: 500000,
+            multiplier: 3,
+          },
+        ],
+      },
+      {
+        displayName: 'Car Wash',
+        earnings: 60,
+        interval: 3000,
+        expansion: { cost: 720 },
+        manager: { cost: 25 },
+        upgrades: [
+          {
+            displayName: 'Drive Through Wash',
+            cost: 1000000,
+            multiplier: 3,
+          },
+        ],
       },
     ],
   },

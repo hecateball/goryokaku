@@ -12,8 +12,8 @@ export type Session = {
 export type Status = {
   reference: firebase.firestore.DocumentReference
   branches: number
-  upgraded: boolean
   manager: boolean
+  grade: number
 }
 
 export const SessionKey: InjectionKey<Session> = Symbol()

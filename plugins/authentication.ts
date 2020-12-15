@@ -39,8 +39,8 @@ const createSession = async (user: firebase.User) => {
   batch.set(userReference.collection('statuses').doc(), {
     reference: businesses.docs[0].ref,
     branches: 1,
-    upgraded: false,
     manager: false,
+    grade: 0,
   })
   await batch.commit()
 }

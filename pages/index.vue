@@ -4,7 +4,7 @@
       <p class="text-6xl">{{ cash }}</p>
     </div>
     <ul>
-      <li v-for="business in businesses" :key="business.id">
+      <li class="my-8" v-for="business in businesses" :key="business.id">
         <Business :business="business" />
       </li>
     </ul>

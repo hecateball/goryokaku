@@ -1,11 +1,12 @@
 <template>
   <button
+    v-if="grade < business.upgrades.length"
     class="bg-blue-500 text-white rounded select-none px-4"
     :class="{ 'opacity-50': disabled }"
     :disabled="disabled"
     @click="upgrade"
   >
-    Upgrade: {{ business.upgrades[0].displayName }} ({{ cost }})
+    Upgrade: {{ business.upgrades[grade].displayName }} ({{ cost }})
   </button>
 </template>
 
@@ -20,11 +21,15 @@ export default defineComponent({
       type: Object as PropType<Business>,
       required: true,
     },
+    grade: {
+      type: Number,
+      required: true,
+    },
   },
-  setup: ({ business }) => {
+  setup: ({ business, grade }) => {
     const { upgrade, disabled } = useUpgrade(business)
     const { formatter } = useFormatter()
-    const cost = computed(() => formatter.format(business.upgrades[0].cost))
+    const cost = computed(() => formatter.format(business.upgrades[grade].cost))
     return {
       upgrade,
       disabled,

@@ -5,13 +5,14 @@
     :disabled="disabled"
     @click="expand"
   >
-    Buy (${{ business.expansion.cost }})
+    Buy ({{ cost }})
   </button>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from '@nuxtjs/composition-api'
+import { PropType, defineComponent, computed } from '@nuxtjs/composition-api'
 import { Business, useExpand } from '~/composables/business'
+import { useFormatter } from '~/composables/formatter'
 
 export default defineComponent({
   props: {
@@ -22,9 +23,12 @@ export default defineComponent({
   },
   setup: ({ business }) => {
     const { expand, disabled } = useExpand(business)
+    const { formatter } = useFormatter()
+    const cost = computed(() => formatter.format(business.expansion.cost))
     return {
       expand,
       disabled,
+      cost,
     }
   },
 })
