@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from '@nuxtjs/composition-api'
-import { Business, Status, useRun } from '~/composables/business'
+import { Business, useRun } from '~/composables/business'
 
 export default defineComponent({
   props: {
@@ -19,13 +19,9 @@ export default defineComponent({
       type: Object as PropType<Business>,
       required: true,
     },
-    status: {
-      type: Object as PropType<Status>,
-      required: true,
-    },
   },
-  setup: ({ business, status }) => {
-    const { run, running } = useRun(business, status)
+  setup: ({ business }) => {
+    const { run, running } = useRun(business)
     return {
       run,
       running,

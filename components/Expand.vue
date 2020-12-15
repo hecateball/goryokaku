@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { PropType, defineComponent } from '@nuxtjs/composition-api'
-import { Business, Status, useExpand } from '~/composables/business'
+import { Business, useExpand } from '~/composables/business'
 
 export default defineComponent({
   props: {
@@ -19,13 +19,9 @@ export default defineComponent({
       type: Object as PropType<Business>,
       required: true,
     },
-    status: {
-      type: Object as PropType<Status>,
-      required: true,
-    },
   },
-  setup: ({ business, status }) => {
-    const { expand, disabled } = useExpand(business, status)
+  setup: ({ business }) => {
+    const { expand, disabled } = useExpand(business)
     return {
       expand,
       disabled,

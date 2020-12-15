@@ -47,13 +47,6 @@ const businessConverter: firebase.firestore.FirestoreDataConverter<Business> = {
   },
 }
 
-export type Status = {
-  reference: Ref<firebase.firestore.DocumentReference>
-  branches: Ref<number>
-  upgraded: Ref<boolean>
-  automated: Ref<boolean>
-}
-
 export const useBusinesses = () => {
   const businesses = ref<Business[]>([])
   const { fetchState } = useFetch(async () => {
@@ -65,48 +58,4 @@ export const useBusinesses = () => {
     businesses.value = snapshot.docs.map((doc) => doc.data())
   })
   return { businesses, fetchState }
-}
-
-export const useStatus = (id: string) => {
-  const currentUser = firebase.auth().currentUser
-  if (currentUser === null) {
-    throw new Error('unauthenticated')
-  }
-  const status = reactive({
-    reference: firebase
-      .firestore()
-      .collection('users')
-      .doc(currentUser.uid)
-      .collection('statuses')
-      .doc(),
-    branches: 0,
-    upgraded: false,
-    automated: false,
-  })
-
-  const unsubscribe = firebase
-    .firestore()
-    .collection('users')
-    .doc(currentUser.uid)
-    .collection('statuses')
-    .where(
-      'reference',
-      '==',
-      firebase.firestore().collection('businesses').doc(id)
-    )
-    .limit(1)
-    .onSnapshot((snapshot) => {
-      if (snapshot.docs.length !== 1) {
-        throw new Error('unexpected status')
-      }
-      status.reference = snapshot.docs[0].ref
-      status.branches = snapshot.docs[0].get('branches')
-      status.upgraded = snapshot.docs[0].get('upgraded')
-      status.automated = snapshot.docs[0].get('automated')
-    })
-  onUnmounted(unsubscribe)
-  const refs = toRefs(status)
-  return {
-    status: refs,
-  }
 }

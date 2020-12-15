@@ -1,38 +1,31 @@
 import { useSession } from '~/composables/session'
 import { computed } from '@nuxtjs/composition-api'
-import { Business, Status } from '~/composables/business/index'
+import { Business } from '~/composables/business/index'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
-export const useExpand = (
-  business: Pick<Business, 'expansion'>,
-  status: Pick<Status, 'reference'>
-) => {
+export const useExpand = (business: Business) => {
   const { session } = useSession()
+  const disabled = computed(() => session.cash < business.expansion.cost)
   const expand = async () => {
-    const currentUser = firebase.auth().currentUser
-    if (currentUser === null) {
-      throw new Error('unauthenticated')
-    }
-    if (session.cash < business.expansion.cost) {
+    if (disabled.value) {
       return
     }
     const batch = firebase.firestore().batch()
     const userReference = firebase
       .firestore()
       .collection('users')
-      .doc(currentUser.uid)
+      .doc(firebase.auth().currentUser!.uid)
     batch.update(userReference, {
       cash: firebase.firestore.FieldValue.increment(
         -1 * business.expansion.cost
       ),
     })
-    batch.update(status.reference.value, {
+    batch.update(session.statuses[business.id].reference, {
       branches: firebase.firestore.FieldValue.increment(1),
     })
     await batch.commit()
   }
-  const disabled = computed(() => session.cash < business.expansion.cost)
   return { expand, disabled }
 }

@@ -1,14 +1,13 @@
 import { ref, watchEffect } from '@nuxtjs/composition-api'
-import { Business, Status } from '~/composables/business/index'
+import { Business } from '~/composables/business/index'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import { useSession } from '~/composables/session'
 
-export const useRun = (
-  business: Pick<Business, 'earnings' | 'interval'>,
-  status: Pick<Status, 'branches' | 'automated'>
-) => {
+export const useRun = (business: Business) => {
   const running = ref<boolean>(false)
+  const { session } = useSession()
   const run = async () => {
     if (running.value) {
       return
@@ -25,7 +24,7 @@ export const useRun = (
       .doc(currentUser.uid)
       .update({
         cash: firebase.firestore.FieldValue.increment(
-          business.earnings * status.branches.value
+          business.earnings * session.statuses[business.id].branches
         ),
       })
   }
@@ -33,7 +32,7 @@ export const useRun = (
     if (running.value) {
       return
     }
-    if (status.automated.value) {
+    if (session.statuses[business.id].automated) {
       await run()
     }
   })

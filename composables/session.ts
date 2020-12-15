@@ -1,16 +1,19 @@
-import {
-  InjectionKey,
-  onUnmounted,
-  provide,
-  inject,
-  reactive,
-} from '@nuxtjs/composition-api'
+import { InjectionKey, inject } from '@nuxtjs/composition-api'
 import firebase from 'firebase/app'
-import 'firebase/auth'
 import 'firebase/firestore'
 
 export type Session = {
   cash: number
+  statuses: {
+    [key: string]: Status
+  }
+}
+
+export type Status = {
+  reference: firebase.firestore.DocumentReference
+  branches: number
+  upgraded: boolean
+  automated: boolean
 }
 
 export const SessionKey: InjectionKey<Session> = Symbol()

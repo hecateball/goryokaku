@@ -1,38 +1,34 @@
-import { useSession } from '~/composables/session'
 import { computed } from '@nuxtjs/composition-api'
-import { Business, Status } from '~/composables/business/index'
+import { Business } from '~/composables/business/index'
+import { useSession } from '~/composables/session'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
-export const useUpgrade = (
-  business: Pick<Business, 'upgrade'>,
-  status: Pick<Status, 'reference' | 'upgraded'>
-) => {
+export const useUpgrade = (business: Business) => {
   const { session } = useSession()
+  const disabled = computed(
+    () =>
+      session.statuses[business.id].upgraded ||
+      session.cash < business.upgrade.cost
+  )
   const upgrade = async () => {
-    const currentUser = firebase.auth().currentUser
-    if (currentUser === null) {
-      throw new Error('unauthenticated')
-    }
-    if (session.cash < business.upgrade.cost) {
+    if (disabled.value) {
       return
     }
     const batch = firebase.firestore().batch()
     const userReference = firebase
       .firestore()
       .collection('users')
-      .doc(currentUser.uid)
+      .doc(firebase.auth().currentUser!.uid)
     batch.update(userReference, {
       cash: firebase.firestore.FieldValue.increment(-1 * business.upgrade.cost),
     })
-    batch.update(status.reference.value, {
+    batch.update(session.statuses[business.id].reference, {
       upgraded: true,
     })
     await batch.commit()
   }
-  const disabled = computed(
-    () => status.upgraded.value || session.cash < business.upgrade.cost
-  )
+
   return { upgrade, disabled }
 }

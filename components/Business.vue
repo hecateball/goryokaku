@@ -1,16 +1,19 @@
 <template>
-  <div>
-    <h2>{{ business.displayName }}({{ branches }})</h2>
-    <Run :business="business" :status="status" />
-    <Expand :business="business" :status="status" />
-    <HireManager :business="business" :status="status" />
-    <Upgrade :business="business" :status="status" />
+  <div v-if="session.statuses[business.id] !== undefined">
+    <h2>
+      {{ business.displayName }}({{ session.statuses[business.id].branches }})
+    </h2>
+    <Run :business="business" />
+    <Expand :business="business" />
+    <HireManager :business="business" />
+    <Upgrade :business="business" />
   </div>
 </template>
 
 <script lang="ts">
 import { PropType, defineComponent } from '@nuxtjs/composition-api'
-import { Business, useStatus } from '~/composables/business'
+import { Business } from '~/composables/business'
+import { useSession } from '~/composables/session'
 import Run from '~/components/Run.vue'
 import Expand from '~/components/Expand.vue'
 import HireManager from '~/components/HireManager.vue'
@@ -29,11 +32,10 @@ export default defineComponent({
       required: true,
     },
   },
-  setup: ({ business }) => {
-    const { status } = useStatus(business.id)
+  setup: () => {
+    const { session } = useSession()
     return {
-      ...status,
-      status,
+      session,
     }
   },
 })
