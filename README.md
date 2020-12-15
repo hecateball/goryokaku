@@ -35,6 +35,12 @@ When you access to the application:
 
 This process runs before the application is loaded.
 
+### Emulators
+While you are running this application in development mode (npm start), 
+you can access Firebase emulators UI to see saved user data.
+
+Firebase emulators UI: [http://localhost:4000](http://localhost:4000)
+
 ## Full-stack
 This application put focus on "Creating a full-stack app"
 
@@ -73,16 +79,13 @@ Firestore is not good choice for applications like AdVenture Capitalist which re
 Need to write Security Rules (for Firestore) before it goes production
 to prevent unwanted data access.
 
-### Testing
-
 ## Link
 This application is hosted at [https://goryokaku.web.app](https://goryokaku.web.app)
 
-> This Firebase hosted version connects real Firestore. 
->  Don't hire manager to avoid me going bankrupt :)
+### IMPORTANT!! 
+Please use local development mode (npm build && npm start) rather than this link.
+As I mentioned above, this solution is not cost optimized.
 
-b. Whether the solution focuses on back-end, front-end or if it's full stack.
-c. Reasoning behind your technical choices, including architectural.
-d. Trade-offs you might have made, anything you left out, or what you might do
-differently if you were to spend additional time on the project.
-e. Link to the hosted application, if applicable.
+> This Firebase hosted version connects real Firestore, and I need to pay for it. 
+> Don't hire manager to avoid me going bankrupt :)
+
