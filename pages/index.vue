@@ -1,53 +1,35 @@
 <template>
-  <div class="container">
+  <div>
     <div>
-      <Logo />
-      <h1 class="title">Adventure Capitalist Clone</h1>
-      <div class="links"></div>
+      <p class="text-6xl">{{ cash }}</p>
     </div>
+    <ul>
+      <li v-for="business in businesses" :key="business.id">
+        <Business :business="business" />
+      </li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@nuxtjs/composition-api'
-import Logo from '~/components/Logo.vue'
+import { defineComponent, computed } from '@nuxtjs/composition-api'
+import { useSession } from '~/composables/session'
+import { useBusinesses } from '~/composables/business'
+import { useFormatter } from '~/composables/formatter'
+import Business from '~/components/Business.vue'
 
 export default defineComponent({
   components: {
-    Logo,
+    Business,
+  },
+  setup: () => {
+    const { businesses } = useBusinesses()
+    const { session } = useSession()
+    const { formatter } = useFormatter()
+    return {
+      businesses,
+      cash: computed(() => formatter.format(session.cash)),
+    }
   },
 })
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>

@@ -10,6 +10,8 @@ node_modules/
 # Nuxt generate
 dist
 
-
 # Service worker
 sw.*
+
+# Log
+*.log

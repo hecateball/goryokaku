@@ -1,7 +1,7 @@
 export default {
   ssr: false,
   head: {
-    title: 'goryokaku',
+    title: 'Adventure Capitalist Clone',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -9,11 +9,16 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
-  // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
-  plugins: ['~/plugins/firebase'],
-  buildModules: ['@nuxt/typescript-build', '@nuxtjs/composition-api'],
+  plugins: [
+    '~/plugins/firebase',
+    '~/plugins/authentication',
+    '~/plugins/initialize',
+  ],
+  buildModules: [
+    '@nuxt/typescript-build',
+    '@nuxtjs/composition-api',
+    '@nuxtjs/tailwindcss',
+  ],
   modules: ['@nuxtjs/pwa'],
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
