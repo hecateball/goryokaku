@@ -13,7 +13,7 @@ export type Status = {
   reference: firebase.firestore.DocumentReference
   branches: number
   upgraded: boolean
-  automated: boolean
+  manager: boolean
 }
 
 export const SessionKey: InjectionKey<Session> = Symbol()

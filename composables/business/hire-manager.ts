@@ -9,7 +9,7 @@ export const useHireManager = (business: Business) => {
   const { session } = useSession()
   const disabled = computed(
     () =>
-      session.statuses[business.id].automated ||
+      session.statuses[business.id].manager ||
       session.cash < business.manager.cost
   )
   const hireManager = async () => {
@@ -25,7 +25,7 @@ export const useHireManager = (business: Business) => {
       cash: firebase.firestore.FieldValue.increment(-1 * business.manager.cost),
     })
     batch.update(session.statuses[business.id].reference, {
-      automated: true,
+      manager: true,
     })
     await batch.commit()
   }

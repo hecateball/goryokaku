@@ -25,12 +25,13 @@ export type Business = {
   manager: {
     cost: number
   }
-  upgrade: {
+  upgrades: {
+    displayName: string
     cost: number
-  }
+  }[]
 }
 
-const businessConverter: firebase.firestore.FirestoreDataConverter<Business> = {
+const converter: firebase.firestore.FirestoreDataConverter<Business> = {
   fromFirestore(snapshot: firebase.firestore.QueryDocumentSnapshot): Business {
     return {
       id: snapshot.id,
@@ -39,7 +40,12 @@ const businessConverter: firebase.firestore.FirestoreDataConverter<Business> = {
       interval: snapshot.get('interval'),
       expansion: snapshot.get('expansion'),
       manager: snapshot.get('manager'),
-      upgrade: snapshot.get('upgrade'),
+      upgrades: [
+        {
+          displayName: 'Something',
+          cost: snapshot.get('upgrade').cost,
+        },
+      ],
     }
   },
   toFirestore() {
@@ -53,7 +59,7 @@ export const useBusinesses = () => {
     const snapshot = await firebase
       .firestore()
       .collection('businesses')
-      .withConverter(businessConverter)
+      .withConverter(converter)
       .get()
     businesses.value = snapshot.docs.map((doc) => doc.data())
   })

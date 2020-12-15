@@ -5,7 +5,7 @@
     :disabled="disabled"
     @click="expand"
   >
-    Buy (${{ business.upgrade.cost }})
+    Buy (${{ business.expansion.cost }})
   </button>
 </template>
 

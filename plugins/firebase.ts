@@ -10,10 +10,10 @@ export default defineNuxtPlugin(async ({ $config }) => {
   firebase.initializeApp($config.firebaseConfig)
   firebase.auth().useEmulator('http://localhost:9099/')
   firebase.firestore().useEmulator('localhost', 8080)
-  await setupBusiness()
+  await setupBusinesses($config.businesses)
 })
 
-const setupBusiness = async () => {
+const setupBusinesses = async (businesses: object[]) => {
   const snapshot = await firebase
     .firestore()
     .collection('businesses')
@@ -23,13 +23,8 @@ const setupBusiness = async () => {
     return
   }
   const batch = firebase.firestore().batch()
-  batch.set(firebase.firestore().collection('businesses').doc(), {
-    displayName: 'Lemonade Stand',
-    earnings: 1,
-    interval: 1000,
-    expansion: { cost: 10 },
-    manager: { cost: 25 },
-    upgrade: { cost: 20 },
-  })
+  businesses.forEach((business) =>
+    batch.set(firebase.firestore().collection('businesses').doc(), business)
+  )
   await batch.commit()
 }

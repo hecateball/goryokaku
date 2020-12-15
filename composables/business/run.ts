@@ -32,7 +32,7 @@ export const useRun = (business: Business) => {
     if (running.value) {
       return
     }
-    if (session.statuses[business.id].automated) {
+    if (session.statuses[business.id].manager) {
       await run()
     }
   })

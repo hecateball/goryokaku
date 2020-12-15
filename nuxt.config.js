@@ -20,9 +20,6 @@ export default {
     '@nuxtjs/tailwindcss',
   ],
   modules: ['@nuxtjs/pwa'],
-
-  // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
   publicRuntimeConfig: {
     firebaseConfig: {
       apiKey: process.env.FIREBASE_API_KEY,
@@ -32,5 +29,15 @@ export default {
       messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
       appId: process.env.FIREBASE_APP_ID,
     },
+    businesses: [
+      {
+        displayName: 'Lemonade Stand',
+        earnings: 1,
+        interval: 1000,
+        expansion: { cost: 10 },
+        manager: { cost: 25 },
+        upgrade: { cost: 20 },
+      },
+    ],
   },
 }

@@ -1,11 +1,26 @@
 <template>
   <div v-if="session.statuses[business.id] !== undefined">
-    <h2>
-      {{ business.displayName }}({{ session.statuses[business.id].branches }})
-    </h2>
-    <Run :business="business" />
+    <div class="my-2">
+      <h2 class="text-2xl">{{ business.displayName }}</h2>
+      <p>({{ session.statuses[business.id].branches }})</p>
+    </div>
+    <div class="my-2">
+      <h3 class="text-xl">Upgrades</h3>
+      <ul class="px-8">
+        <li class="list-disc" v-for="upgrade in business.upgrades">
+          {{ upgrade.displayName }}
+        </li>
+      </ul>
+    </div>
+    <Run
+      :business="business"
+      :manager="session.statuses[business.id].manager"
+    />
     <Expand :business="business" />
-    <HireManager :business="business" />
+    <HireManager
+      :business="business"
+      :manager="session.statuses[business.id].manager"
+    />
     <Upgrade :business="business" />
   </div>
 </template>

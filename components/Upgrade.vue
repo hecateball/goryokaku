@@ -5,13 +5,14 @@
     :disabled="disabled"
     @click="upgrade"
   >
-    Upgrade (${{ business.manager.cost }})
+    Upgrade: {{ business.upgrades[0].displayName }} ({{ cost }})
   </button>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from '@nuxtjs/composition-api'
+import { PropType, defineComponent, computed } from '@nuxtjs/composition-api'
 import { Business, useUpgrade } from '~/composables/business'
+import { useFormatter } from '~/composables/formatter'
 
 export default defineComponent({
   props: {
@@ -22,9 +23,12 @@ export default defineComponent({
   },
   setup: ({ business }) => {
     const { upgrade, disabled } = useUpgrade(business)
+    const { formatter } = useFormatter()
+    const cost = computed(() => formatter.format(business.upgrades[0].cost))
     return {
       upgrade,
       disabled,
+      cost,
     }
   },
 })

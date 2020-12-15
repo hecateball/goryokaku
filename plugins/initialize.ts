@@ -14,7 +14,7 @@ const converter = {
     return {
       business: snapshot.get('reference'),
       branches: snapshot.get('branches'),
-      automated: snapshot.get('automated'),
+      manager: snapshot.get('manager'),
       upgraded: snapshot.get('upgraded'),
     }
   },
@@ -53,7 +53,7 @@ export default defineNuxtPlugin(async () => {
           statuses[status.data().business.id] = {
             reference: status.ref,
             branches: status.data().branches,
-            automated: status.data().automated,
+            manager: status.data().manager,
             upgraded: status.data().upgraded,
           }
         })

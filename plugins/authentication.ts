@@ -9,7 +9,7 @@ import 'firebase/firestore'
 import firestore = firebase.firestore
 
 export default defineNuxtPlugin(async () => {
-  const unsubscribe = await new Promise<Function>((resolve) => {
+  await new Promise<Function>((resolve) => {
     const unsubscribe = firebase
       .auth()
       .onAuthStateChanged(async (currentUser: firebase.User | null) => {
@@ -18,10 +18,10 @@ export default defineNuxtPlugin(async () => {
           await createSession(credential.user!)
           return
         }
-        resolve(unsubscribe)
+        unsubscribe()
+        resolve()
       })
   })
-  unsubscribe()
 })
 
 const createSession = async (user: firebase.User) => {
@@ -40,7 +40,7 @@ const createSession = async (user: firebase.User) => {
     reference: businesses.docs[0].ref,
     branches: 1,
     upgraded: false,
-    automated: false,
+    manager: false,
   })
   await batch.commit()
 }
