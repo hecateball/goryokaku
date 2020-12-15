@@ -25,11 +25,13 @@ export type Business = {
   manager: {
     cost: number
   }
-  upgrades: {
-    displayName: string
-    cost: number
-    multiplier: number
-  }[]
+  upgrades: Upgrade[]
+}
+
+export type Upgrade = {
+  displayName: string
+  cost: number
+  multiplier: number
 }
 
 const converter: firebase.firestore.FirestoreDataConverter<Business> = {
@@ -49,6 +51,9 @@ const converter: firebase.firestore.FirestoreDataConverter<Business> = {
   },
 }
 
+/**
+ * Fetch all Businesses.
+ */
 export const useBusinesses = () => {
   const businesses = ref<Business[]>([])
   const { fetchState } = useFetch(async () => {

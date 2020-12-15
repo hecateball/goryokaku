@@ -5,6 +5,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+/**
+ * Create a function to update given business.
+ * @param business
+ */
 export const useUpgrade = (business: Business) => {
   const { session } = useSession()
   const disabled = computed(
@@ -25,6 +29,7 @@ export const useUpgrade = (business: Business) => {
       cash: firebase.firestore.FieldValue.increment(
         -1 * business.upgrades[session.statuses[business.id].grade].cost
       ),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     batch.update(session.statuses[business.id].reference, {
       grade: firebase.firestore.FieldValue.increment(1),

@@ -81,7 +81,7 @@ export default {
       },
       {
         displayName: 'Car Wash',
-        earnings: 60,
+        earnings: 140,
         interval: 10000,
         expansion: { cost: 720 },
         manager: { cost: 500000 },

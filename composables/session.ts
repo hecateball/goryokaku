@@ -4,6 +4,7 @@ import 'firebase/firestore'
 
 export type Session = {
   cash: number
+  updatedAt: firebase.firestore.Timestamp
   statuses: {
     [key: string]: Status
   }

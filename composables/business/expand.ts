@@ -5,6 +5,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+/**
+ * Create a function to expand given business.
+ * @param business
+ */
 export const useExpand = (business: Business) => {
   const { session } = useSession()
   const disabled = computed(() => session.cash < business.expansion.cost)
@@ -21,6 +25,7 @@ export const useExpand = (business: Business) => {
       cash: firebase.firestore.FieldValue.increment(
         -1 * business.expansion.cost
       ),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
     if (session.statuses[business.id] !== undefined) {
       batch.update(session.statuses[business.id].reference, {

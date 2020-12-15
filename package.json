@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
-    "start": "nuxt-ts start",
+    "start": "firebase emulators:start",
     "test": "jest"
   },
   "dependencies": {

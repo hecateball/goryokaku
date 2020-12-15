@@ -5,6 +5,10 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
 
+/**
+ * Create a function to run given business.
+ * @param business
+ */
 export const useRun = (business: Business) => {
   const running = ref<boolean>(false)
   const { session } = useSession()
@@ -25,8 +29,10 @@ export const useRun = (business: Business) => {
       .doc(currentUser.uid)
       .update({
         cash: firebase.firestore.FieldValue.increment(profit),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
   }
+  // Run the business automatically if manager is hired.
   watchEffect(async () => {
     if (running.value) {
       return
